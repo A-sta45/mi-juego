@@ -23,11 +23,19 @@ puntaje = 0
 nivel = 1
 velocidad_enemigos = 1
 
+
 # Cargar las imágenes de los personajes
-jugador = pygame.image.load("link.png").convert()
-enemigo1 = pygame.image.load("diablo_robot.png").convert()
-enemigo2 = pygame.image.load("fantasma.png").convert()
-enemigo3 = pygame.image.load("mounstro.png").convert()
+jugador = pygame.Surface((50, 50))
+jugador.fill((255, 255, 255))
+enemigo1 = pygame.Surface((50, 50))
+enemigo1.fill((0, 0, 0))
+pygame.draw.polygon(enemigo1, (255, 0, 0), [(0, 0), (25, 50), (50, 0)])
+enemigo2 = pygame.Surface((50, 50))
+enemigo2.fill((0, 0, 0))
+pygame.draw.polygon(enemigo2, (255, 0, 0), [(0, 0), (25, 50), (50, 0)])
+enemigo3 = pygame.Surface((50, 50))
+enemigo3.fill((0, 0, 0))
+pygame.draw.polygon(enemigo3, (255, 0, 0), [(0, 0), (25, 50), (50, 0)])
 
 # Definir la posición inicial del jugador y los enemigos
 posicion_jugador_x = SCREEN_WIDTH / 2
