@@ -44,7 +44,7 @@ posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
 posicion_enemigo_y = random.randint(0, SCREEN_HEIGHT - ENEMY_HEIGHT)
 
 # Definir el tiempo en segundos que queremos que pase antes de que aparezcan los enemigos
-TIEMPO_ENTRE_OLEADAS = 10
+TIEMPO_ENTRE_OLEADAS = 30
 
 # Definir la última vez que aparecieron los enemigos
 ultima_oleada = time.time()
@@ -74,7 +74,6 @@ def mover_enemigos():
     posicion_enemigo_y += velocidad_enemigos
     # Si el enemigo llega al final de la pantalla, restar una vida y reiniciar su posición
     if posicion_enemigo_y > SCREEN_HEIGHT:
-        vida -= 1
         posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
         posicion_enemigo_y = 0
     # Detectar colisiones entre el jugador y los enemigos
@@ -85,8 +84,6 @@ def mover_enemigos():
         # Si hay una colisión, restar una vida
         vida -= 1
         vida.pop()
-
-    # Incrementar el puntaje si se llega al final de la pantalla sin perder una vida
 
     # Si el puntaje es un múltiplo de 100, aumentar el nivel y la velocidad de los enemigos
     if puntaje % 100 == 0:
@@ -106,15 +103,15 @@ def jugar():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    posicion_jugador_x -= velocidad_jugador
-                elif event.key == pygame.K_RIGHT:
-                    posicion_jugador_x += velocidad_jugador
-                elif event.key == pygame.K_UP:
-                    posicion_jugador_y -= velocidad_jugador
-                elif event.key == pygame.K_DOWN:
-                    posicion_jugador_y += velocidad_jugador
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            posicion_jugador_x -= velocidad_jugador
+        if keys[pygame.K_RIGHT]:
+            posicion_jugador_x += velocidad_jugador
+        if keys[pygame.K_UP]:
+            posicion_jugador_y -= velocidad_jugador
+        if keys[pygame.K_DOWN]:
+            posicion_jugador_y += velocidad_jugador
 
         # Dibujar los personajes en la pantalla
         screen.fill((0, 0, 0))
@@ -125,7 +122,7 @@ def jugar():
         if time.time() - ultima_oleada > TIEMPO_ENTRE_OLEADAS:
             ultima_oleada = time.time()
             posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
-            posicion_enemigo_y = 0
+            posicion_enemigo_y = 10
 
         # Dibujar la información del juego en la pantalla
         fuente = pygame.font.SysFont("arial", 20)
