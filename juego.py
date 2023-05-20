@@ -21,7 +21,7 @@ FPS = 20
 vida = 3
 puntaje = 0
 nivel = 1
-velocidad_enemigos = 1
+velocidad_enemigos = 10
 
 
 # Cargar las imágenes de los personajes
@@ -43,6 +43,7 @@ posicion_jugador_y = SCREEN_HEIGHT - 50
 posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
 posicion_enemigo_y = random.randint(0, SCREEN_HEIGHT - ENEMY_HEIGHT)
 
+
 # Definir el tiempo en segundos que queremos que pase antes de que aparezcan los enemigos
 TIEMPO_ENTRE_OLEADAS = 30
 
@@ -50,12 +51,10 @@ TIEMPO_ENTRE_OLEADAS = 30
 ultima_oleada = time.time()
 
 # Definir la velocidad de movimiento del jugador
-velocidad_jugador = 5
+velocidad_jugador = 10
 
 # Definir la velocidad de movimiento de los enemigos
-velocidad_enemigo1 = 1
-velocidad_enemigo2 = 1
-velocidad_enemigo3 = 1
+
 
 enemigos = [enemigo1, enemigo2, enemigo3]
 
@@ -64,8 +63,8 @@ def dibujar_personajes():
     # Dibujar el jugador y los enemigos en la pantalla
     screen.blit(jugador, (posicion_jugador_x, posicion_jugador_y))
     screen.blit(enemigo1, (posicion_enemigo_x, posicion_enemigo_y))
-    screen.blit(enemigo2, (posicion_enemigo_x, posicion_enemigo_y - 100))
-    screen.blit(enemigo3, (posicion_enemigo_x, posicion_enemigo_y + 100))
+    screen.blit(enemigo2, (posicion_enemigo_x - 200, posicion_enemigo_y))
+    screen.blit(enemigo3, (posicion_enemigo_x + 200, posicion_enemigo_y))
 
 
 def mover_enemigos():
@@ -76,6 +75,8 @@ def mover_enemigos():
     if posicion_enemigo_y > SCREEN_HEIGHT:
         posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
         posicion_enemigo_y = 0
+        nivel += 1
+        velocidad_enemigos += 1
     # Detectar colisiones entre el jugador y los enemigos
     if posicion_jugador_x < posicion_enemigo_x + ENEMY_WIDTH and \
             posicion_jugador_x + ENEMY_WIDTH > posicion_enemigo_x and \
@@ -83,12 +84,27 @@ def mover_enemigos():
             posicion_jugador_y + ENEMY_HEIGHT > posicion_enemigo_y:
         # Si hay una colisión, restar una vida
         vida -= 1
-        vida.pop()
+        posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
+        posicion_enemigo_y = 0
+
+    if posicion_jugador_x < posicion_enemigo_x - 200 + ENEMY_WIDTH and \
+            posicion_jugador_x + ENEMY_WIDTH > posicion_enemigo_x - 200 and \
+            posicion_jugador_y < posicion_enemigo_y + ENEMY_HEIGHT and \
+            posicion_jugador_y + ENEMY_HEIGHT > posicion_enemigo_y:
+        vida -= 1
+        posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
+        posicion_enemigo_y = 0
+
+    if posicion_jugador_x < posicion_enemigo_x + 200 + ENEMY_WIDTH and \
+            posicion_jugador_x + ENEMY_WIDTH > posicion_enemigo_x + 200 and \
+            posicion_jugador_y < posicion_enemigo_y + ENEMY_HEIGHT and \
+            posicion_jugador_y + ENEMY_HEIGHT > posicion_enemigo_y:
+        vida -= 1
+        posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
+        posicion_enemigo_y = 0
+        # Si hay una colisión, restar una vida
 
     # Si el puntaje es un múltiplo de 100, aumentar el nivel y la velocidad de los enemigos
-    if puntaje % 100 == 0:
-        nivel += 1
-        velocidad_enemigos += 1
 
 # Definir la función principal del juego
 
@@ -121,8 +137,6 @@ def jugar():
         # Generar nuevas oleadas de enemigos cada cierto tiempo
         if time.time() - ultima_oleada > TIEMPO_ENTRE_OLEADAS:
             ultima_oleada = time.time()
-            posicion_enemigo_x = random.randint(0, SCREEN_WIDTH - ENEMY_WIDTH)
-            posicion_enemigo_y = 10
 
         # Dibujar la información del juego en la pantalla
         fuente = pygame.font.SysFont("arial", 20)
